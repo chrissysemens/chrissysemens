@@ -32,21 +32,11 @@ function TypingLog({ lines }: { lines: TypingLine[] }) {
     const [displayedLine, setDisplayedLine] = useState("");
     const [lineIndex, setLineIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
-    const prevFirstLineRef = useRef<string | undefined>(undefined);
 
     useEffect(() => {
-        const firstLineText = lines[0]?.text;
-        if (!firstLineText) {
-            prevFirstLineRef.current = undefined;
-            return;
-        }
-
-        if (prevFirstLineRef.current !== firstLineText) {
-            setDisplayedLine("");
-            setLineIndex(0);
-            setCharIndex(0);
-            prevFirstLineRef.current = firstLineText;
-        }
+        setDisplayedLine("");
+        setLineIndex(0);
+        setCharIndex(0);
     }, [lines]);
 
     useEffect(() => {
@@ -145,7 +135,9 @@ export default function GenerativeScene({
         : 0;
 
     const typingLines = useMemo(() => {
-        if (!location) return [] as TypingLine[];
+        if (!location || pollen.pollenTypes.length === 0) {
+            return [] as TypingLine[];
+        }
 
         return [
             {
@@ -215,10 +207,10 @@ export default function GenerativeScene({
 
         const busyness = pollen.busyness;
 
-        const nodeCount = Math.floor(35 + busyness * 140);
-        const particleCount = Math.floor(300 + busyness * 1700);
+        const nodeCount = Math.floor(45 + busyness * 180);
+        const particleCount = Math.floor(400 + busyness * 2500);
         const rotationSpeed = 0.02 + busyness * 0.08;
-        const maxDistance = 1.6 + busyness * 1.8;
+        const maxDistance = 1.8 + busyness * 2.2;
         const lightIntensity = 3 + busyness * 7;
 
         const installation = new THREE.Group();
@@ -257,7 +249,7 @@ export default function GenerativeScene({
         });
 
         const geometry = new THREE.IcosahedronGeometry(
-            1.6 + busyness * 1.6,
+            2 + busyness * 2,
             2
         );
 

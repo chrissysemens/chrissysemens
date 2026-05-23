@@ -1,0 +1,218 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  cursor: crosshair;
+}
+
+canvas {
+  display: block;
+}
+
+.landing-page {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: black;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.1) 40%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+}
+
+.content-shell {
+  position: relative;
+  z-index: 10;
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 32px;
+
+  pointer-events: none;
+
+  /* allow interactive children (links, topbar, hero, footer) to receive pointer events */
+  & .topbar,
+  & .hero,
+  & .footer,
+  & a {
+    pointer-events: auto;
+  }
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+
+  opacity: 0.5;
+}
+
+.hero {
+  max-width: 1100px;
+
+  p {
+    margin-bottom: 24px;
+
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+
+    opacity: 0.45;
+  }
+
+  h1 {
+    margin: 0;
+
+    font-size: clamp(64px, 10vw, 160px);
+    line-height: 0.9;
+    font-weight: 200;
+    letter-spacing: -0.08em;
+  }
+
+  .allow-location {
+    margin-top: 24px;
+    padding: 0.95rem 1.6rem;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: transparent;
+    color: inherit;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .allow-location:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+  }
+
+  .location-status {
+    margin-top: 24px;
+    min-height: 3.4rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .typing-log {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    letter-spacing: 0.01em;
+    opacity: 0.88;
+    color: #e4e4e7;
+    max-width: 760px;
+    white-space: pre-wrap;
+  }
+
+  .typing-log div {
+    margin-bottom: 0.45rem;
+  }
+
+  .typed-number {
+    font-weight: 700;
+  }
+
+  .typed-number.low {
+    color: #5efb83;
+  }
+
+  .typed-number.mid {
+    color: #ff9f1c;
+  }
+
+  .typed-number.high {
+    color: #ff375f;
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    width: 0.7ch;
+    animation: blink 1s step-start infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+a {
+    opacity: 0.8;
+    &:hover {
+        opacity: 1;
+        text-decoration: underline;
+    }
+    color: #fff;
+    text-decoration: none;
+}
+
+.github {
+    &:hover {
+        color: lightgrey
+    }
+}
+
+.linkedin {
+    &:hover {
+        color: lightblue;
+    }
+}
+
+.spotify {
+    &:hover {
+        color: lightgreen;
+    }
+}
+
+.soundcloud {
+    &:hover {
+        color: orange
+    }
+}
+
+.footer {
+  p {
+    max-width: 380px;
+    line-height: 1.6;
+    opacity: 0.55;
+  }
+}

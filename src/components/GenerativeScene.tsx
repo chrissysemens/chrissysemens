@@ -32,11 +32,21 @@ function TypingLog({ lines }: { lines: TypingLine[] }) {
     const [displayedLine, setDisplayedLine] = useState("");
     const [lineIndex, setLineIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+    const prevFirstLineRef = useRef<string | undefined>(undefined);
 
     useEffect(() => {
-        setDisplayedLine("");
-        setLineIndex(0);
-        setCharIndex(0);
+        const firstLineText = lines[0]?.text;
+        if (!firstLineText) {
+            prevFirstLineRef.current = undefined;
+            return;
+        }
+
+        if (prevFirstLineRef.current !== firstLineText) {
+            setDisplayedLine("");
+            setLineIndex(0);
+            setCharIndex(0);
+            prevFirstLineRef.current = firstLineText;
+        }
     }, [lines]);
 
     useEffect(() => {
@@ -120,7 +130,7 @@ export default function GenerativeScene({
             "echo",
         ];
 
-        return `${fragments[seed % fragments.length]}-${String(
+        return `pollen-${fragments[seed % fragments.length]}-${String(
             seed
         ).padStart(6, "0")}`;
     }, [seed]);
@@ -205,10 +215,10 @@ export default function GenerativeScene({
 
         const busyness = pollen.busyness;
 
-        const nodeCount = Math.floor(45 + busyness * 180);
-        const particleCount = Math.floor(400 + busyness * 2500);
+        const nodeCount = Math.floor(35 + busyness * 140);
+        const particleCount = Math.floor(300 + busyness * 1700);
         const rotationSpeed = 0.02 + busyness * 0.08;
-        const maxDistance = 1.8 + busyness * 2.2;
+        const maxDistance = 1.6 + busyness * 1.8;
         const lightIntensity = 3 + busyness * 7;
 
         const installation = new THREE.Group();
@@ -247,7 +257,7 @@ export default function GenerativeScene({
         });
 
         const geometry = new THREE.IcosahedronGeometry(
-            2 + busyness * 2,
+            1.6 + busyness * 1.6,
             2
         );
 
@@ -511,7 +521,7 @@ export default function GenerativeScene({
 
                 <footer className="footer">
                     <p>
-                        Geometry density reacts to
+                        Pollen geometry density changes to
                         live pollen conditions in your current location.
                     </p>
                 </footer>

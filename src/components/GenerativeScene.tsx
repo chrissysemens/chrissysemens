@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import "../styles.scss";
 import PlayPauseButton from "./PlayPauseButton";
 import { TypingLog, type TypingLine } from "./TypingLog";
-import pollenAudio from "../assets/pollen.wav";
+import pollenAudio from "../assets/pollen.mp3";
 
 type Coordinates = {
     latitude: number;
@@ -482,7 +482,7 @@ const GenerativeScene = ({
                         </div>
                         <div className="row">
                             <span style={{ fontSize: '0.5rem' }}>
-                                <TypingLog speed={350} fontSize={10} lines={[{ text: 'Now playing...' }, { text: "pollen.wav" }]} />
+                                <TypingLog speed={350} fontSize={10} lines={[{ text: 'Now playing...' }, { text: "pollen.mp3" }]} />
                             </span>
                         </div>
                     </div>

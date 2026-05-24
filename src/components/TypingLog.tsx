@@ -25,11 +25,13 @@ export const TypingLog = ({
     speed = 35,
     linePause = 1100,
     fontSize = 14,
-    uppercase = true,
+    uppercase = false,
 }: TypingLogProps) => {
     const [displayedLine, setDisplayedLine] = useState("");
     const [lineIndex, setLineIndex] = useState(0);
     const [charIndex, setCharIndex] = useState(0);
+
+    console.log("uppercase", uppercase);
 
     useEffect(() => {
         setDisplayedLine("");

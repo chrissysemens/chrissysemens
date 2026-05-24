@@ -57,6 +57,7 @@ canvas {
   justify-content: space-between;
 
   padding: 32px;
+  padding-top: 16px !important;
 
   pointer-events: none;
 
@@ -70,12 +71,12 @@ canvas {
 }
 
 .topbar {
+  padding-top: 8px;
   display: flex;
   justify-content: space-between;
 
   font-size: 10px;
   letter-spacing: 0.3em;
-  text-transform: uppercase;
 
   color: rgba(255, 255, 255, 0.5);
 }
@@ -84,7 +85,7 @@ canvas {
   max-width: 1100px;
 
   p {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
 
     font-size: 11px;
     letter-spacing: 0.45em;
@@ -233,6 +234,7 @@ a {
 }
 
 .name {
+  text-transform: uppercase;
   margin-right: 12px;
 }
 
@@ -269,7 +271,6 @@ a {
 .row {
   display: flex;
   flex-direction: row;
-  margin-bottom: 8px;
 }
 
 .footer {

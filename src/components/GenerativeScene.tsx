@@ -4,15 +4,13 @@ import * as THREE from "three";
 import { motion } from "framer-motion";
 
 import "../styles.scss";
+import PlayPauseButton from "./PlayPauseButton";
+import { TypingLog, type TypingLine } from "./TypingLog";
+import pollenAudio from "../assets/pollen.wav";
 
 type Coordinates = {
     latitude: number;
     longitude: number;
-};
-
-type TypingLine = {
-    text: string;
-    score?: number;
 };
 
 type Props = {
@@ -21,88 +19,59 @@ type Props = {
     onRequestLocation: () => void;
 };
 
-function getScoreClass(score?: number) {
-    if (score === undefined) return "";
-    if (score >= 4) return "high";
-    if (score >= 2.5) return "mid";
-    return "low";
-}
 
-function TypingLog({ lines }: { lines: TypingLine[] }) {
-    const [displayedLine, setDisplayedLine] = useState("");
-    const [lineIndex, setLineIndex] = useState(0);
-    const [charIndex, setCharIndex] = useState(0);
 
-    useEffect(() => {
-        setDisplayedLine("");
-        setLineIndex(0);
-        setCharIndex(0);
-    }, [lines]);
-
-    useEffect(() => {
-        const currentLine = lines[lineIndex];
-        if (!currentLine) return;
-
-        const timeout = window.setTimeout(() => {
-            if (charIndex >= currentLine.text.length) {
-                const nextIndex = lineIndex + 1;
-                if (nextIndex < lines.length) {
-                    setDisplayedLine("");
-                    setLineIndex(nextIndex);
-                    setCharIndex(0);
-                } else {
-                    setDisplayedLine("");
-                    setLineIndex(0);
-                    setCharIndex(0);
-                }
-                return;
-            }
-
-            setDisplayedLine(currentLine.text.slice(0, charIndex + 1));
-            setCharIndex((idx) => idx + 1);
-        }, charIndex === currentLine.text.length ? 700 : 35);
-
-        return () => window.clearTimeout(timeout);
-    }, [charIndex, lineIndex, lines]);
-
-    const currentLine = lines[lineIndex];
-    const scoreClass = getScoreClass(currentLine?.score);
-
-    const renderLine = () => {
-        if (!currentLine) return null;
-
-        const parts = displayedLine.split(/(\d+\.\d+|\d+)/g);
-
-        return parts.map((part, index) => {
-            if (/^\d+\.\d+$|^\d+$/.test(part) && currentLine.score !== undefined) {
-                return (
-                    <span key={index} className={`typed-number ${scoreClass}`}>
-                        {part}
-                    </span>
-                );
-            }
-            return <span key={index}>{part}</span>;
-        });
-    };
-
-    return (
-        <div className="typing-log">
-            <div>
-                {renderLine()}
-                {currentLine ? (
-                    <span className="typing-cursor">|</span>
-                ) : null}
-            </div>
-        </div>
-    );
-}
-
-export default function GenerativeScene({
+const GenerativeScene = ({
     location,
     pollen,
     onRequestLocation,
-}: Props) {
+}: Props) => {
     const mountRef = useRef<HTMLDivElement | null>(null);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const animationFrameRef = useRef<number | null>(null);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const [audioLoaded, setAudioLoaded] = useState(false);
+
+    useEffect(() => {
+        const audio = new Audio(pollenAudio);
+
+        audio.preload = "auto";
+        audio.loop = true;
+
+        const handleCanPlayThrough = () => {
+            setAudioLoaded(true);
+        };
+
+        audio.addEventListener("canplaythrough", handleCanPlayThrough);
+
+        audio.load();
+
+        audioRef.current = audio;
+
+        return () => {
+            audio.pause();
+            audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+            audioRef.current = null;
+        };
+    }, []);
+
+    const togglePlayback = async () => {
+        const audio = audioRef.current;
+
+        if (!audioLoaded || !audio) return;
+
+        if (isAudioPlaying) {
+            audio.pause();
+            setIsAudioPlaying(false);
+        } else {
+            try {
+                await audio.play();
+                setIsAudioPlaying(true);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    };
 
     const [seed] = useState(() =>
         Math.floor(Math.random() * 999999)
@@ -169,6 +138,41 @@ export default function GenerativeScene({
             },
         ];
     }, [location, normalizedDensityScore, totalPollenScore, pollen.pollenTypes]);
+
+    useEffect(() => {
+        const startAudio = async () => {
+            const audio = audioRef.current;
+
+            if (!audio || !audioLoaded) {
+                return;
+            }
+
+            try {
+                await audio.play();
+                setIsAudioPlaying(true);
+            } catch (err) {
+                console.error(err);
+            }
+
+            window.removeEventListener(
+                "pointerdown",
+                startAudio
+            );
+        };
+
+        window.addEventListener(
+            "pointerdown",
+            startAudio,
+            { once: true }
+        );
+
+        return () => {
+            window.removeEventListener(
+                "pointerdown",
+                startAudio
+            );
+        };
+    }, [audioLoaded]);
 
     useEffect(() => {
         const mount = mountRef.current;
@@ -379,8 +383,6 @@ export default function GenerativeScene({
 
         const clock = new THREE.Clock();
 
-        let animationFrame = 0;
-
         const animate = () => {
             const elapsed = clock.getElapsedTime();
 
@@ -412,7 +414,7 @@ export default function GenerativeScene({
 
             renderer.render(scene, camera);
 
-            animationFrame =
+            animationFrameRef.current =
                 requestAnimationFrame(animate);
         };
 
@@ -437,7 +439,10 @@ export default function GenerativeScene({
         );
 
         return () => {
-            cancelAnimationFrame(animationFrame);
+            if (animationFrameRef.current !== null) {
+                cancelAnimationFrame(animationFrameRef.current);
+                animationFrameRef.current = null;
+            }
 
             window.removeEventListener(
                 "resize",
@@ -466,7 +471,21 @@ export default function GenerativeScene({
 
             <section className="content-shell">
                 <nav className="topbar">
-                    <span>Chrissy Semens</span>
+                    <div className="col">
+                        <div className="row">
+                            <span className="name">Chrissy Semens</span>
+                            <span className={'play-pause'}>
+                                <PlayPauseButton
+                                    isPlaying={isAudioPlaying}
+                                    onToggle={togglePlayback}
+                                    disabled={!audioLoaded} /></span>
+                        </div>
+                        <div className="row">
+                            <span style={{ fontSize: '0.5rem' }}>
+                                <TypingLog speed={350} fontSize={10} lines={[{ text: 'Now playing...' }, { text: "pollen.wav" }]} />
+                            </span>
+                        </div>
+                    </div>
                     <span>{visitSignature}</span>
                 </nav>
 
@@ -521,3 +540,5 @@ export default function GenerativeScene({
         </main>
     );
 }
+
+export default GenerativeScene;

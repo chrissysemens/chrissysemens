@@ -10,6 +10,7 @@ type TypingLogProps = {
     speed?: number;
     linePause?: number;
     fontSize?: number;
+    uppercase?: boolean;
 };
 
 const getScoreClass = (score?: number) => {
@@ -24,6 +25,7 @@ export const TypingLog = ({
     speed = 35,
     linePause = 1100,
     fontSize = 14,
+    uppercase = true,
 }: TypingLogProps) => {
     const [displayedLine, setDisplayedLine] = useState("");
     const [lineIndex, setLineIndex] = useState(0);
@@ -81,7 +83,7 @@ export const TypingLog = ({
                 );
             }
 
-            return <span key={index}>{part}</span>;
+            return <span key={index}>{uppercase ? part.toUpperCase() : part}</span>;
         });
     };
 

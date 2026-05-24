@@ -482,7 +482,12 @@ const GenerativeScene = ({
                         </div>
                         <div className="row">
                             <span style={{ fontSize: '0.5rem' }}>
-                                <TypingLog speed={350} fontSize={10} lines={[{ text: 'Now playing...' }, { text: "pollen.mp3" }]} />
+                                {isAudioPlaying ? 
+                                <TypingLog 
+                                    uppercase={false} 
+                                    speed={350} 
+                                    fontSize={10} 
+                                    lines={[{ text: 'Now playing...' }, { text: "pollen.mp3" }]} /> : null}
                             </span>
                         </div>
                     </div>

@@ -77,7 +77,7 @@ canvas {
   letter-spacing: 0.3em;
   text-transform: uppercase;
 
-  opacity: 0.5;
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .hero {
@@ -137,19 +137,24 @@ canvas {
     align-items: center;
     justify-content: center;
 
-    color: inherit;
     font: inherit;
     line-height: 0;
 
     cursor: pointer;
     outline: none;
     box-shadow: none;
+
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+
+  .play-pause-button:hover {
+    color: #fff;
+    transform: scale(1.08);
   }
 
   .play-pause-button:focus,
   .play-pause-button:focus-visible,
-  .play-pause-button:active,
-  .play-pause-button:hover {
+  .play-pause-button:active {
     outline: none;
     box-shadow: none;
     background: transparent;

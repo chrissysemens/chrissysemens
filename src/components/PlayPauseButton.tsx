@@ -32,7 +32,13 @@ const PlayPauseButton = ({
       }}
     >
       <span className="play-pause-glyph" aria-hidden="true">
-        {disabled ? "…" : isPlaying ? <FaPause size={12} color={"white"} /> : <FaPlay size={12} color={'white'} />}
+        {disabled ? (
+          "…"
+        ) : isPlaying ? (
+          <FaPause size={12} />
+        ) : (
+          <FaPlay size={12} />
+        )}
       </span>
     </div>
   );

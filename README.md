@@ -1,6 +1,7 @@
 # Pollen by Chrissy Semens
 
-My Perosnal profile page and pollen advisor.
+My Personal profile page and pollen advisor.
+[Pollen by Chrissy Semens](http://chrissysemens.dev)
 
 ![Pollen](/src/assets/screenshot.png)
 

@@ -518,6 +518,7 @@ const GenerativeScene = ({
                         <a className="linkedin" href="https://www.linkedin.com/in/christophersemens/" target="_blank" rel="noopener noreferrer">Linkedin</a> &nbsp; / &nbsp;
                         <a className="spotify" href="https://open.spotify.com/artist/2mxDo1LJaooXPLZk8th3xB?si=LEnKaEkFQvCxTF09CJMaSQ" target="_blank" rel="noopener noreferrer">Spotify</a> &nbsp; / &nbsp;
                         <a className="soundcloud" href="https://soundcloud.com/chrissysemens" target="_blank" rel="noopener noreferrer">Soundcloud</a>
+                        <a className="tMidi" href="https://github.com/chrissysemens/tMidi" target="_blank" rel="noopener noreferrer">tMidi</a>
                     </h3>
 
                     <div className="location-status">
